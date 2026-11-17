@@ -78,6 +78,8 @@ frontmatter/              Half title, dedication, title + imprint page,
                           abstract (+ translation), acknowledgments,
                           list of abbreviations, preface
   img/                      Placeholder logos (replace them)
+    original/                 Logos of the original thesis (UAM, EDUAM, CSIC,
+                              ICMM, funding, University of Copenhagen, QDev, ...)
 ch1/ ch2/ ch3/            Chapters, each with its own figures/ folder
 appendix/                 Appendices, figures in img/
 backmatter/               Integrity statement, closing epigraph (colophon)
@@ -96,7 +98,12 @@ figures_src/              Sources of the mock figures and logos (pgfplots)
 2. Replace the three placeholder logos in `frontmatter/img/`
    (`university_logo.pdf`, `institutions.pdf`, `funding.pdf`). Keep the file
    names, or update `frontmatter/title_page.tex`. Tune the funding-logo
-   height factor there to your logos.
+   height factor there to your logos. The logos of the original thesis
+   are kept in `frontmatter/img/original/`, unused by the example. For a
+   UAM / ICMM-CSIC thesis, point the title page at
+   `img/original/UAM+EDUAM.pdf` (title page) and
+   `img/original/UAM+EDUAM+CSIC+ICMM.pdf` plus `img/original/funding.pdf`
+   (imprint page), as the commented lines in `title_page.tex` show.
 3. Put your name in `\ifthesisauthorname` in `preamble/bibliography.tex`,
    with every spelling your `.bib` files use. That name is set in bold in
    every bibliography entry.
