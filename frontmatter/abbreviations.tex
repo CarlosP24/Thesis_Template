@@ -1,0 +1,14 @@
+\documentclass[../main]{subfiles}
+
+\begin{document}
+
+% Include all defined acronyms here (preamble/acronyms.tex), even if they
+% haven't been used yet.
+\glsaddall
+
+% \label{abbreviations} is the target that in-text acronym links point to
+% (see the \glstextformat definition in preamble/packages.tex).
+\phantomsection\label{abbreviations}
+\printglossary[type=\acronymtype, title={List of Abbreviations}, nonumberlist, style=acrtwocol]
+
+\end{document}

@@ -1,0 +1,117 @@
+% ============================================================
+% Page geometry and chapter style
+% ============================================================
+
+% Page geometry: B5-like trimmed page (250 mm x 176 mm).
+\stockaiii
+\pageaiv
+\setstocksize{250mm}{176mm}
+\settrims{0pt}{0pt}
+\settrimmedsize{\stockheight}{\stockwidth}{*}
+\setulmargins{2.5cm}{*}{*}
+\setlrmarginsandblock{2cm}{1.5cm}{*}
+\checkandfixthelayout
+
+% Paragraphing. With memoir's default \parskip of 0pt the only mark of a
+% paragraph break is the first-line indent, so a long stretch of prose with
+% no display or figure in it sets as an undifferentiated slab. A fraction
+% of a line between paragraphs breaks that up while staying well short of
+% the block-paragraph look; the indent is kept, since it is what still
+% distinguishes a new paragraph from a line that happens to end short. Set
+% through memoir's \abnormalparskip rather than \setlength directly, so
+% list and display spacing follow \parskip instead of drifting out of
+% proportion with it.
+\abnormalparskip{0.4\onelineskip plus 0.15\onelineskip minus 0.05\onelineskip}
+
+% Page style and chapter headings
+
+% memoir's `ruled` marks put two spaces after the number, since they are
+% built with `{. \space}` — visible now that the section mark runs in the
+% header ("1.1.  Title ..."). Re-issue them with a single space, appended
+% to \@ruledmarks so it still applies whenever the style is selected.
+\makeatletter
+\g@addto@macro\@ruledmarks{%
+	\createmark{chapter}{left}{shownumber}{}{.\space}%
+	\createmark{section}{right}{shownumber}{}{.\space}%
+}
+\makeatother
+
+\pagestyle{ruled}
+\chapterstyle{madsen}
+% Use Roboto for chapter/appendix heading text.
+\renewcommand*{\chapnamefont}{\roboto\Large\scshape\raggedleft}
+\renewcommand*{\chaptitlefont}{\roboto\Huge\bfseries\raggedleft}
+% Keep madsen style but align Chapter+number to the text block.
+% The default madsen uses a 0pt box that can push the number into the margin.
+\makeatletter
+\renewcommand*{\printchaptername}{}
+\renewcommand*{\chapternamenum}{}
+% The numeral alone carries the red accent at full brand saturation — one
+% deliberate hit of institutional colour per chapter opener, structural
+% rather than inline, so it never competes with the darkened link colours
+% in the running text (see preamble/colors.tex).
+\renewcommand*{\printchapternum}{%
+    \makebox[\textwidth][r]{%
+        \resizebox{!}{4ex}{\chapnamefont\bfseries\sffamily\@chapapp\ \textcolor{accent_red}{\thechapter}}%
+    }%
+}
+\renewcommand*{\printchapternonum}{%
+    \afterchapternum
+}
+\makeatother
+\setlength{\beforechapskip}{15pt}
+
+% Section numbering scheme (memoir defaults, stated explicitly):
+% - Chapters:       1, 2, ...
+% - Sections:       1.1, 1.2, ... (chapter-qualified)
+% - Subsections:    1.1.1, 1.1.2, ...
+% - Subsubsections: 1.1.1.1, 1.1.1.2, ...
+\renewcommand*{\thechapter}{\arabic{chapter}}
+\renewcommand*{\thesection}{\thechapter.\arabic{section}}
+\renewcommand*{\thesubsection}{\thesection.\arabic{subsection}}
+\renewcommand*{\thesubsubsection}{\thesubsection.\arabic{subsubsection}}
+\setsecnumdepth{subsubsection}
+\settocdepth{subsection}
+
+% Use Roboto for sectioning titles.
+\setsecheadstyle{\roboto\Large\bfseries}
+\setsubsecheadstyle{\roboto\large\bfseries}
+\setsubsubsecheadstyle{\roboto\normalsize\bfseries}
+\setbeforeparaskip{1.0\onelineskip plus 0.5\onelineskip minus 0.2\onelineskip}
+\setafterparaskip{0.5\onelineskip}
+\setparaheadstyle{\robotoMediumFace\normalsize\itshape}
+\setsubparaheadstyle{\robotoMediumFace\normalsize}
+
+% Prevent a \section heading from being stranded near the bottom of a
+% page with almost no body text below it before the next page break.
+\pretocmd{\section}{\needspace{6\baselineskip}}{}{}
+
+% Running heads follow the TU Delft dissertation layout: the page number
+% sits in the header at the *outer* edge (left on versos, right on rectos)
+% and the running mark at the inner edge, so a spread reads number-outward
+% on both sides.  The footer is empty; the only page carrying a number at
+% the foot is a chapter opening, centred, through the plain style below.
+%
+% memoir's own `ruled` marks are already what we want and are left alone:
+% \createmark{chapter}{left} puts the chapter in \leftmark *and clears*
+% \rightmark, and \createmark{section}{right} then fills \rightmark — so a
+% recto before a chapter's first section, or in a chapter with no sections
+% at all, simply has a blank mark.
+\makeevenhead{ruled}{\roboto\thepage}{}{\roboto\leftmark}
+\makeoddhead{ruled}{\roboto\rightmark}{}{\roboto\thepage}
+\makeevenfoot{ruled}{}{}{}
+\makeoddfoot{ruled}{}{}{}
+
+% Chapter-opening pages use memoir's plain pagestyle (aliased to `chapter`);
+% this is the one place the number stays at the foot, centred.
+\makeevenfoot{plain}{}{\roboto\thepage}{}
+\makeoddfoot{plain}{}{\roboto\thepage}{}
+
+% Graphics search path. Inside a subfile, \includegraphics also resolves
+% paths relative to that subfile's own directory (subfiles package), so
+% chapters can write `figures/foo.pdf` both in the full build and in a
+% standalone chapter build.
+\graphicspath{
+    {frontmatter/img/}
+    {appendix/img/}
+}

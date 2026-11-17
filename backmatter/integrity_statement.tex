@@ -1,0 +1,26 @@
+\documentclass[../main]{subfiles}
+
+% Unnumbered recto page, centered on the page, placed before the closing
+% epigraph (backmatter/colophon.tex, on the following verso). Holds the
+% declaration of integrity and the statement on AI use; the degree statement
+% is on the imprint page (frontmatter/title_page.tex). Adapt the wording to
+% what your doctoral school requires.
+
+\begin{document}
+\cleartooddpage[\thispagestyle{empty}]
+\thispagestyle{empty}
+\vspace*{\fill}
+\begin{center}
+I, \thesisAuthor, hereby declare
+\begin{itemize}
+    \item That the Thesis complies with the Ethical Code of the \thesisUniversity.
+    \item That it is an original, free of plagiarism, work in which international standards of scientific integrity have been followed.
+\end{itemize}
+
+\vspace{0.5cm}
+
+\noindent [Statement on the use of artificial intelligence tools during the preparation of this work, if any.]
+\end{center}
+\vspace*{\fill}
+
+\end{document}

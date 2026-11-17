@@ -1,0 +1,85 @@
+\documentclass[../main]{subfiles}
+
+
+\begin{document}
+\chapter{Preface}
+% Epigraph in another language: wrap it in otherlanguage so that babel
+% hyphenates it correctly (languages loaded in preamble/packages.tex).
+\begin{otherlanguage}{danish}
+\begin{chquote}
+Dette er et eksempel på et citat, \\
+skrevet på et andet sprog. \\
+\bigskip
+-- Forfatter, \textit{Værk}
+\end{chquote}
+\end{otherlanguage}
+\vfill
+
+% The preface tells how the thesis came about and how it is organized, and
+% lists the publications it is based on.
+\lipsum[1-2]
+
+The story of the thesis can cite the publications it is built on, which carry a P label~\cite{Doe:PRB24, Roe:PRL25}, other papers of the author, with an N label~\cite{Lee:PRB23}, and the general literature, with a plain number~\cite{Smith:PRL20, Brown:PRB19}.
+\lipsum[3]
+
+This Thesis is organized as follows:
+\begin{itemize}
+    \item Chapter~\ref{ch:ch1} introduces the background of the Thesis.
+    Its last section, Section~\ref{sec:thisthesis}, summarizes the content of the following chapters.
+
+    \item Chapter~\ref{ch:ch2}, adapted and extended from Refs.~\cite{Doe:PRB24, Roe:PRL25, Doe:SP25}, presents the main results.
+
+    \item Chapter~\ref{ch:ch3} closes the Thesis with the conclusions and an outlook, followed by their Spanish translation.
+
+    \item Appendix~\ref{app:example} complements Chapter~\ref{ch:ch1}.
+    Appendix~\ref{app:adapted} expands on Chapter~\ref{ch:ch2} and is adapted from Ref.~\cite{Doe:a26}.
+\end{itemize}
+
+
+\section*{Publications included in this Thesis}
+\thesisSuperscript{*} Indicates first theory author.\thesisifcofirstseen{pubsin}{\ \thesisSuperscript{\textdagger} Indicates co-first author.}
+\begin{refsection}[generated/publications_sorted.bib]
+\nocite{*}
+\newrefcontext[labelprefix=P,sorting=oldestfirst]
+\printbibliography[heading=none, resetnumbers=true]
+\end{refsection}
+
+\section*{Other publications during the PhD}
+\thesisifcofirstseen{pubsnotin}{\thesisSuperscript{\textdagger} Indicates co-first author.}
+\begin{refsection}[generated/publications_not_sorted.bib]
+\nocite{*}
+\newrefcontext[labelprefix=N,sorting=oldestfirst]
+\printbibliography[heading=none, resetnumbers=true]
+\end{refsection}
+
+\section*{Author contributions}
+In Refs.~\cite{Doe:PRB24, Doe:a26}, I developed the code, performed the calculations and produced the figures.
+In Ref.~\cite{Roe:PRL25}, I performed the theory calculations and contributed to the writing of the manuscript.
+\lipsum[4][1-3]
+
+\section*{Code and data availability}
+The numerical results of this Thesis were obtained with the \verb|MockPackage.jl| package~\cite{Doe:26a}, which builds on \verb|OtherPackage|~\cite{Smith:26}.
+The code and data behind the figures of each publication adapted in this Thesis are openly available, as listed below.
+
+\begin{center}
+    \begin{tabular}{l@{\hspace{1.5em}}ll}
+        \toprule
+        & Publication & Code and data (DOI) \\
+        \midrule
+        \multicolumn{3}{l}{Chapter~\ref{ch:ch2}. \nameref{ch:ch2}} \\
+        & \cite{Doe:PRB24} & \href{https://doi.org/10.5555/mock.zenodo.3}{10.5555/mock.zenodo.3} \\
+        & \cite{Roe:PRL25} & \href{https://doi.org/10.5555/mock.zenodo.4}{10.5555/mock.zenodo.4} \\
+        & \cite{Doe:SP25}  & \href{https://doi.org/10.5555/mock.zenodo.5}{10.5555/mock.zenodo.5} \\
+        \addlinespace
+        \multicolumn{3}{l}{Appendix~\ref{app:adapted}. \nameref{app:adapted}} \\
+        & \cite{Doe:a26}   & \href{https://doi.org/10.5555/mock.zenodo.6}{10.5555/mock.zenodo.6} \\
+        \bottomrule
+    \end{tabular}
+\end{center}
+
+\ifSubfilesClassLoaded{%
+\clearpage
+\section*{Standalone References}
+\printbibliography[heading=none]
+}{}
+\end{document}

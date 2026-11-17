@@ -1,0 +1,39 @@
+\documentclass[../main]{subfiles}
+
+% Appendix A: a plain appendix (no opening page, no epigraph). Labels use
+% the app: prefix. Refer to an appendix as a whole ("Appendix~\ref{...}")
+% from the chapters rather than to its equations or figures.
+
+\begin{document}
+% In a standalone build, switch to appendix numbering (A, B, ...).
+\ifSubfilesClassLoaded{\appendix}{}
+\chapter{An example appendix}
+\label{app:example}
+
+This appendix collects technical details that Chapter~\ref{ch:ch1} leaves out.
+Acronyms count per appendix as they do per chapter: a single use is spelled out with \verb|\acrlong|, as the \acrlong{cpr} here.
+\lipsum[1][1-4]
+In Section~\ref{app:derivation} we derive an expression, and in Section~\ref{app:limits} we discuss its limits.
+
+\section{A derivation}
+\label{app:derivation}
+\lipsum[2][1-4]
+Integrals keep a thin space before the differential, as in
+\begin{equation}
+    \label{eq:app_integral}
+    N = \int_0^R dr\,r\rho(r) = \int d\omega\, f(\omega)\nu(\omega),
+\end{equation}
+which is the only place a thin space appears in math.
+\lipsum[3][1-5]
+
+\section{Limiting cases}
+\label{app:limits}
+\lipsum[4][1-6]
+
+\lipsum[5][1-6]
+
+\ifSubfilesClassLoaded{%
+\newrefcontext[labelprefix=]
+\printbibliography
+}{}
+\end{document}

@@ -1,0 +1,27 @@
+% Placeholder logos for the title and imprint pages. Each page of this
+% document becomes one PDF in frontmatter/img/ (see
+% scripts/make_mock_figures.sh). Replace those PDFs with the real logos of
+% your university, doctoral school, institute and funders, keeping the
+% file names or updating frontmatter/title_page.tex.
+\documentclass[tikz, border=0pt]{standalone}
+\usepackage{fourier-otf}
+\tikzset{logo/.style={draw=black!50, dashed, fill=black!5, rounded corners=2pt,
+    align=center, font=\sffamily\small, text=black!60, inner sep=0pt}}
+\begin{document}
+% Page 1: university + doctoral school (title page, top)
+\begin{tikzpicture}
+    \node[logo, minimum width=120mm, minimum height=24mm]
+        {University logo \quad+\quad Doctoral School logo};
+\end{tikzpicture}
+% Page 2: institution strip (imprint page)
+\begin{tikzpicture}
+    \foreach \i in {1,...,4} {
+        \node[logo, minimum width=31mm, minimum height=12mm] at (\i*33mm,0) {Institution \i};
+    }
+\end{tikzpicture}
+% Page 3: funding lockup (imprint page)
+\begin{tikzpicture}
+    \node[logo, minimum width=45mm, minimum height=16mm]
+        {Funding agency\\logos\\(three-line lockup)};
+\end{tikzpicture}
+\end{document}

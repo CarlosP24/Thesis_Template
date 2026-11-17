@@ -1,0 +1,413 @@
+% ============================================================
+% Bibliography configuration
+% ============================================================
+% Three source files (see README.md):
+%  - publications.bib      your papers that are part of the thesis (P1, P2, ...)
+%  - publications_not.bib  your other papers during the PhD   (N1, N2, ...)
+%  - bibliography.bib      everything else, cited entries only (1, 2, ...)
+% The first two are read through generated/*_sorted.bib, which
+% scripts/prepare_publication_bibs.py rebuilds on every latexmk run (it adds
+% a year-month sortkey so they print oldest first). Never edit generated/.
+\usepackage[
+   backend=biber,
+   style=numeric-comp,
+   useprefix=true,
+   sorting=none,
+   sortcites=true,
+   maxbibnames=99,
+   maxnames=6,
+   minnames=2,
+   giveninits=true,
+   defernumbers=true,
+   backref=true
+]{biblatex}
+
+% Back-references ("Cited in pp. ...") closing each bibliography entry.
+% The page numbers are hyperlinks, so they pick up linkcolor — the same
+% green the cross-references use, which is what they are.
+\DefineBibliographyStrings{english}{%
+   backrefpage  = {Cited in p.},
+   backrefpages = {Cited in pp.},
+}
+% Print it as its own short sentence rather than biblatex's default
+% parenthetical. Entries already close on a parenthesised year, so the
+% default "(2010). (Cited in p. 3)." stacks two paren groups and strands a
+% period outside the second; here \finentry supplies the closing period.
+\renewbibmacro*{pageref}{%
+   \iflistundef{pageref}
+      {}
+      {\printtext{%
+          \ifnumgreater{\value{pageref}}{1}
+            {\bibstring{backrefpages}\ppspace}
+            {\bibstring{backrefpage}\ppspace}%
+          \printlist[pageref][-\value{listtotal}]{pageref}}}%
+}
+
+% Tag entries by datasource to split bibliography with stable precedence.
+\DeclareSourcemap{
+   \maps[datatype=bibtex,overwrite]{
+      \map{
+         \perdatasource{generated/publications_sorted.bib}
+         \step[fieldset=usera, fieldvalue={pubsin}]
+         \step[fieldset=presort, fieldvalue={a}]
+      }
+      \map{
+         \perdatasource{generated/publications_not_sorted.bib}
+         \step[fieldset=usera, fieldvalue={pubsnotin}]
+         \step[fieldset=presort, fieldvalue={b}]
+      }
+      \map{
+         \perdatasource{bibliography.bib}
+         \step[fieldset=usera, fieldvalue={mainbib}]
+         \step[fieldset=presort, fieldvalue={c}]
+      }
+      % Never truncate a co-first author into "et al.": an entry with an
+      % N=cofirst keyword (see \thesis_bib_author_markers: below) shows at
+      % least its first N names, overriding minbibnames=2 for entries past
+      % maxnames=6 authors. The greedy .* captures the last (largest,
+      % assuming ascending order) cofirst position. This replaces any
+      % hand-set options field on such an entry.
+      \map{
+         \step[fieldsource=keywords, match=\regexp{\A.*(?:\A|,)\s*(\d+)\s*=\s*cofirst\s*(?:,|\Z)}, final]
+         \step[fieldset=options, fieldvalue={minbibnames=$1}]
+      }
+      % Code packages, printed in their own "Code Packages" list (C1, C2,
+      % ...) through the software driver below, which shows the repository
+      % (stored in verba, since \AtEveryBibitem clears url) instead of a
+      % journal code. To add a package: extend the citekey regex here and
+      % add one map with its repository address (without https://).
+      \map{
+         \step[fieldsource=entrykey, match=\regexp{^(Doe:26a|Smith:26)$}, final]
+         \step[fieldset=usera, fieldvalue={codepkg}]
+         \step[typesource=article, typetarget=software]
+         \step[typesource=misc, typetarget=software]
+      }
+      \map{
+         \step[fieldsource=entrykey, match=\regexp{^Doe:26a$}, final]
+         \step[fieldset=verba, fieldvalue={github.com/janedoe/MockPackage.jl}]
+      }
+      \map{
+         \step[fieldsource=entrykey, match=\regexp{^Smith:26$}, final]
+         \step[fieldset=verba, fieldvalue={github.com/asmith/OtherPackage}]
+      }
+      % Short journal names. Kept in sync with \bibjournaltitle below.
+      \map{
+         \step[fieldsource=journaltitle, match=\regexp{^Physical Review B$}, fieldset=shortjournal, fieldvalue={Phys. Rev. B}]
+         \step[fieldsource=journaltitle, match=\regexp{^Physical Review Letters$}, fieldset=shortjournal, fieldvalue={Phys. Rev. Lett.}]
+         \step[fieldsource=journaltitle, match=\regexp{^SciPost Physics$}, fieldset=shortjournal, fieldvalue={SciPost Phys.}]
+      }
+      % Link papers to their erratum via biblatex's related-entry mechanism
+      % rather than \defbibentryset: entry sets never get a citeorder
+      % position under sorting=none, so they always sort to the end of the
+      % bibliography regardless of where they're actually first cited.
+      % related keeps the main entry's own citeorder while still printing
+      % the erratum folded into the same numbered item.
+      \map{
+         \step[fieldsource=entrykey, match=\regexp{^Smith:PRL20$}, final]
+         \step[fieldset=related, fieldvalue={Smith:ErrPRL21}]
+         \step[fieldset=relatedtype, fieldvalue={errata}]
+      }
+   }
+}
+
+% Filters by datasource tag (stored in usera).
+\defbibcheck{pubsin}{\iffieldequalstr{usera}{pubsin}{}{\skipentry}}
+\defbibcheck{pubsnotin}{\iffieldequalstr{usera}{pubsnotin}{}{\skipentry}}
+\defbibcheck{mainbib}{\iffieldequalstr{usera}{mainbib}{}{\skipentry}}
+\defbibcheck{codepkg}{\iffieldequalstr{usera}{codepkg}{}{\skipentry}}
+
+% Separator printed before a related entry (e.g. an erratum) folded into
+% the same numbered bibliography item.
+\DeclareDelimFormat{begrelateddelim}{\addsemicolon\space}
+
+% Oldest-first chronological sorting.
+\DeclareSortingTemplate{oldestfirst}{%
+   \sort[direction=ascending]{\field{sortkey}}
+   \sort{\field{sorttitle}\field{title}}
+   \sort{\field{sortname}\field{author}\field{editor}\field{translator}}
+}
+
+% Global sorting: P entries, then N entries, then everything else (presort
+% a/b/c, set in the sourcemap above); the thesis's own papers go
+% oldest-first by the sortkey that prepare_publication_bibs.py adds, the
+% rest in citation order. sortcites orders the labels inside a \cite by
+% this scheme, so a multi-key cite prints [P1, P3, 5] rather than in
+% first-citation order. The P/N/main/C lists are printed separately with
+% resetnumbers, so the main list's citation order is unaffected.
+\DeclareSortingTemplate{thesis}{%
+   \sort{\field{presort}}
+   \sort[direction=ascending]{\field{sortkey}}
+   \sort{\citeorder}
+}
+\ExecuteBibliographyOptions{sorting=thesis}
+
+% Name punctuation: A. Author and B. Author; A. Author, B. Author, and C. Author
+% (serial comma only for three or more names)
+\DeclareDelimFormat{multinamedelim}{\addcomma\space}
+\DeclareDelimFormat{finalnamedelim}{%
+   \ifnumgreater{\value{liststop}}{2}{\addcomma}{}\space and\space}
+
+% Bold thesis author in bibliography names (robust to accent variants in
+% .bib files). Replace Doe/Jane/J. with your own family and given names,
+% adding every spelling your .bib files use (e.g. Pay\'{a}, Payá, Paya).
+\newcommand{\ifthesisauthorname}[2]{%
+   \ifboolexpr{
+      (test {\ifdefstring{\namepartfamily}{Doe}}) and
+      (test {\ifdefstring{\namepartgiven}{Jane}} or
+       test {\ifdefstring{\namepartgiven}{J.}} or
+       test {\ifdefstring{\namepartgiven}{J}})
+   }
+      {#1}
+      {#2}%
+}
+% Aux-file flag (same mechanism as \label/\ref) recording, per bib-file
+% context (pubsin/pubsnotin), whether a cofirst-marked entry was actually
+% printed — so the "Indicates co-first author" note above a list can be
+% shown only when it applies to that list. Needs a rerun to pick up a
+% newly-added cofirst entry, like any other aux-based cross-reference.
+\makeatletter
+\newif\ifthesiscofirstpubsin
+\newif\ifthesiscofirstpubsnotin
+% No "@" in this name (unlike the kernel macros in its body): it is called
+% from inside the \ExplSyntaxOn block below, where "@" is not catcode-letter,
+% so an "@"-bearing name would silently split into two tokens there.
+\newcommand{\thesisMarkCofirstSeen}{%
+   \@bsphack
+   \iffieldequalstr{usera}{pubsin}
+      {\global\thesiscofirstpubsintrue
+       \protected@write\@auxout{}{\string\global\string\thesiscofirstpubsintrue}}
+      {}%
+   \iffieldequalstr{usera}{pubsnotin}
+      {\global\thesiscofirstpubsnotintrue
+       \protected@write\@auxout{}{\string\global\string\thesiscofirstpubsnotintrue}}
+      {}%
+   \@esphack
+}
+\newcommand{\thesisifcofirstseen}[2]{\csname ifthesiscofirst#1\endcsname #2\fi}
+% The public \textsuperscript is broken by some TeX Live tagged-PDF kernel
+% patches (it routes through an expl3 wrapper that never applies the
+% size/raise, silently printing full-size inline text instead of a
+% superscript). The kernel primitive \@textsuperscript sidesteps that, but
+% positions the mark via a math-mode superscript, whose height follows
+% fourier-otf's math axis/superscript parameters and sits noticeably higher
+% than a typographic superscript should — so raise explicitly instead, at
+% half the classic pre-2020 LaTeX kernel offset (.5ex), to bring it back down.
+\newcommand{\thesisSuperscript}[1]{\leavevmode\raise.25ex\hbox{\fontsize\sf@size\sf@size\selectfont#1}}
+\makeatother
+
+% Author-position markers: keywords = {2=first} prints a * after author 2
+% (first theory author), keywords = {2=cofirst,3=cofirst} a dagger after
+% authors 2 and 3 (co-first authors).
+\ExplSyntaxOn
+\cs_new_protected:Npn \thesis_bib_author_markers:
+ {
+   \iffieldundef{keywords}
+    {}
+    {
+      \tl_set:Nx \l_tmpa_tl { \thefield{keywords} }
+      \int_set:Nn \l_tmpa_int { \value{listcount} }
+      \exp_args:Nxx \regex_match:nnTF
+         { (?:^|,)\s*\int_use:N \l_tmpa_int \s*=\s*first(?:\s*,|$) }
+         { \tl_use:N \l_tmpa_tl }
+         { \thesisSuperscript{*} }
+         {}
+      \exp_args:Nxx \regex_match:nnTF
+         { (?:^|,)\s*\int_use:N \l_tmpa_int \s*=\s*cofirst(?:\s*,|$) }
+         { \tl_use:N \l_tmpa_tl }
+         { \thesisSuperscript{\textdagger}\thesisMarkCofirstSeen }
+         {}
+    }
+ }
+\newcommand{\bibauthormarkers}{\thesis_bib_author_markers:}
+\ExplSyntaxOff
+\renewcommand*{\mkbibnamegiven}[1]{\ifthesisauthorname{\mkbibbold{#1}}{#1}}
+\renewcommand*{\mkbibnamefamily}[1]{\ifthesisauthorname{\mkbibbold{#1}}{#1}\bibauthormarkers}
+
+% Keep bibliography compact.
+% Books/chapters/proceedings keep url/isbn (needed to link the ISBN below);
+% other entry types don't.
+\AtEveryBibitem{%
+   \ifboolexpr{
+      test {\ifentrytype{book}} or
+      test {\ifentrytype{incollection}} or
+      test {\ifentrytype{inproceedings}}
+   }
+      {}
+      {\clearfield{url}\clearfield{isbn}}%
+   \clearfield{urldate}%
+   \clearfield{month}%
+   \clearfield{issn}%
+   \clearlist{language}%
+}
+
+\newcommand{\bibtitlefont}[1]{{\itshape #1}}
+% Fallback chain for short journal names; keep in sync with the sourcemap.
+\newcommand{\bibjournaltitle}{%
+   \iffieldundef{shortjournal}
+      {\iffieldequalstr{journaltitle}{Physical Review B}
+         {Phys. Rev. B}
+         {\iffieldequalstr{journaltitle}{Physical Review Letters}
+            {Phys. Rev. Lett.}
+            {\iffieldequalstr{journaltitle}{SciPost Physics}
+               {SciPost Phys.}
+               {\printfield[noformat]{journaltitle}}}}}
+      {\printfield[noformat]{shortjournal}}%
+}
+% \isdot marks a final abbreviation period (Phys. Rev. Lett.) as a dot, so
+% biblatex does not swallow the comma before the volume.
+\newcommand{\bibjournalblock}{%
+   \printtext{\upshape\bibjournaltitle\isdot}%
+   \setunit{\addcomma\space}%
+   \printfield{volume}%
+   \setunit{\addcomma\space}%
+   \printfield[noformat]{pages}%
+   \setunit{\space}%
+   \printtext[parens]{\printfield{year}}%
+}
+\newcommand{\bibpreprintblock}{%
+   \iffieldundef{number}
+      {\printfield{eprint}}
+      {\printfield{number}}%
+   \setunit{\space}%
+   \printtext[parens]{\printfield{year}}%
+}
+\newcommand{\bibpreprintlinkblock}{%
+   \textcolor{my_red_d}{\bibpreprintblock}%
+}
+
+% ISBN, linked to the DOI if present, else to the URL, else left unlinked.
+\newcommand{\bibisbnblock}{%
+   \iffieldundef{isbn}
+      {}
+      {\iffieldundef{doi}
+          {\iffieldundef{url}
+              {\printfield{isbn}}
+              {\href{\thefield{url}}{\printfield{isbn}}}}
+          {\href{https://doi.org/\thefield{doi}}{\printfield{isbn}}}%
+       \adddot}%
+}
+
+% Authors. Title. Edition, publisher, place, year. ISBN (linked) for books.
+\DeclareBibliographyDriver{book}{%
+   \usebibmacro{begentry}%
+   \printnames{author}%
+   \setunit{\adddot\space}%
+   \printtext{\bibtitlefont{\thefield{title}}}%
+   \adddot
+   \setunit{\space}%
+   \iffieldundef{edition}
+      {}
+      {\printfield{edition}\setunit{\addcomma\space}}%
+   \printlist{publisher}%
+   \setunit{\addcomma\space}%
+   \printlist{location}%
+   \setunit{\addcomma\space}%
+   \printfield{year}%
+   \adddot
+   \setunit{\space}%
+   \bibisbnblock%
+   \setunit{\space}%
+   \usebibmacro{pageref}%
+   \usebibmacro{finentry}%
+}
+
+% Authors. Title. In Booktitle, ed. Editors, vol. N, pages. Publisher, place,
+% year. ISBN (linked) for book chapters and conference proceedings.
+\newcommand{\bibchapterentry}{%
+   \usebibmacro{begentry}%
+   \printnames{author}%
+   \setunit{\adddot\space}%
+   \printtext{\bibtitlefont{\thefield{title}}}%
+   \adddot
+   \setunit{\space}%
+   \printtext{In\space}%
+   \printfield[noformat]{booktitle}%
+   \setunit{\addcomma\space}%
+   \ifnameundef{editor}
+      {}
+      {\printtext{ed.\space}\printnames{editor}\setunit{\addcomma\space}}%
+   \iffieldundef{number}
+      {}
+      {\printtext{vol.\space}\printfield{number}\setunit{\addcomma\space}}%
+   \printfield[noformat]{pages}%
+   \adddot
+   \setunit{\space}%
+   \printlist{publisher}%
+   \setunit{\addcomma\space}%
+   \printlist{location}%
+   \setunit{\addcomma\space}%
+   \printfield{year}%
+   \adddot
+   \setunit{\space}%
+   \bibisbnblock%
+   \setunit{\space}%
+   \usebibmacro{pageref}%
+   \usebibmacro{finentry}%
+}
+\DeclareBibliographyDriver{incollection}{\bibchapterentry}
+\DeclareBibliographyDriver{inproceedings}{\bibchapterentry}
+
+% Full journal code (journal, volume, pages, year) linked to DOI for articles.
+\DeclareBibliographyDriver{article}{%
+   \usebibmacro{begentry}%
+   % Author-less entries (errata) skip the separator, which would otherwise
+   % surface as a stray period after the title.
+   \ifnameundef{author}
+      {}
+      {\printnames{author}%
+       \setunit{\adddot\space}}%
+   \printtext{\bibtitlefont{\thefield{title}}}%
+   \printtext{\addcomma\space}%
+   \iffieldundef{doi}
+      {\bibjournalblock}
+      {\href{https://doi.org/\thefield{doi}}{\bibjournalblock}}%
+   % A related entry (an erratum) is printed before the closing period, so
+   % the item reads "... (2020); Erratum ..., (2021)." rather than "(2020).;".
+   \ifbibliography
+      {\iftoggle{bbx:related}
+         {\usebibmacro{related:init}%
+          \usebibmacro{related}}
+         {}}
+      {}%
+   \adddot
+   \setunit{\space}%
+   \usebibmacro{pageref}%
+   \usebibmacro{finentry}%
+}
+
+% Code packages: author, title and repository, no journal code.
+% The repository is stored without scheme and shown that way, linking to
+% its https:// address.
+\DeclareFieldFormat{codepkgurl}{\href{https://#1}{\nolinkurl{#1}}}
+\DeclareBibliographyDriver{software}{%
+   \usebibmacro{begentry}%
+   \printnames{author}%
+   \setunit{\adddot\space}%
+   \printtext{\bibtitlefont{\thefield{title}}}%
+   \setunit{\addcomma\space}%
+   \printfield[codepkgurl]{verba}%
+   \adddot
+   \setunit{\space}%
+   \usebibmacro{pageref}%
+   \usebibmacro{finentry}%
+}
+
+% Full arXiv code (number + year) linked to DOI for preprints/misc items.
+\DeclareBibliographyDriver{misc}{%
+   \usebibmacro{begentry}%
+   \printnames{author}%
+   \setunit{\adddot\space}%
+   \printtext{\bibtitlefont{\thefield{title}}}%
+   \printtext{\addcomma\space}%
+   \iffieldundef{doi}
+      {\bibpreprintblock}
+      {\href{https://doi.org/\thefield{doi}}{\bibpreprintlinkblock}}%
+   \adddot
+   \setunit{\space}%
+   \usebibmacro{pageref}%
+   \usebibmacro{finentry}%
+}
+
+\addbibresource{generated/publications_sorted.bib}
+\addbibresource{generated/publications_not_sorted.bib}
+\addbibresource{bibliography.bib}

@@ -1,0 +1,75 @@
+% ============================================================
+% Custom environments
+% ============================================================
+
+% Chapter epigraph (right-aligned quote body + upright attribution after \bigskip)
+\newenvironment{chquote}
+    {%
+        \begin{FlushRight}\itshape
+        \let\chquotebigskip\bigskip
+        \renewcommand{\bigskip}{\chquotebigskip\upshape}%
+    }
+    {\end{FlushRight}}
+
+% Chapter abstract, set at the foot of the chapter opening page (the layout
+% used in the TU Delft dissertations): a short summary of what the chapter
+% does, in italics, so it reads as a different register from the prose that
+% starts overleaf.
+%
+% It runs on the full text measure, sharing its edges with the rule under
+% the chapter number, the disclaimer rule below it and the body text
+% overleaf; the epigraph above, inset and ragged, is then the only element
+% on the page that floats free of that spine. Keep the abstract to two or
+% three sentences: italic at this measure gets tiring past four or five
+% lines, and at that point it wants a narrower measure instead (wrap the
+% body in an `adjustwidth` and drop to \small).
+%
+% The environment supplies its own \vfill, so on the opening page it goes
+% after the \begin{chquote} epigraph and needs no \vfill of its own; a
+% \begin{disclaimer} block, if the chapter has one, follows it directly and
+% likewise needs no manual \vfill.
+\newenvironment{chabstract}
+    {%
+        \par\vfill
+        \setlength{\parindent}{0pt}%
+        \itshape
+        \noindent\ignorespaces
+    }
+    {\par\vspace{0.5\onelineskip}}
+
+% Chapter disclaimer (e.g. "Parts of this chapter published in ...")
+\newenvironment{disclaimer}%
+    {\hrule\medskip\begin{small}}%
+    {\end{small}}
+
+% Appendix disclaimer. Appendices have no opening page of their own, so the
+% text starts right under the title; the disclaimer is set as a bottom float
+% instead, landing at the foot of the first page after whatever text fits
+% there, as on a chapter opening page. Place it right after the \label.
+\newenvironment{appdisclaimer}%
+    {\begin{figure}[b!]\begin{disclaimer}}%
+    {\end{disclaimer}\end{figure}}
+
+% Marks the paragraph that follows as a synthesis/closing of the whole
+% subsection (not just the preceding \paragraph subtopic): a centered
+% single asterisk, with no heading of its own.
+\newcommand{\subsectionclose}{%
+    \par\medskip
+    \centerline{\textasteriskcentered}%
+    \medskip
+}
+
+% Same for the synthesis that closes a whole section, across its
+% subsections: two centered asterisks.
+\newcommand{\sectionclose}{%
+    \par\medskip
+    \centerline{\textasteriskcentered\quad\textasteriskcentered}%
+    \medskip
+}
+
+% And for a whole chapter: three centered asterisks.
+\newcommand{\chapterclose}{%
+    \par\bigskip
+    \centerline{\textasteriskcentered\quad\textasteriskcentered\quad\textasteriskcentered}%
+    \bigskip
+}

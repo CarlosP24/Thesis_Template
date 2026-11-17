@@ -1,0 +1,106 @@
+\documentclass[twoside, 10pt]{memoir}
+
+% ── Preamble (modular) ──────────────────────────────────────
+\input{preamble/packages}
+\input{preamble/colors}
+\input{preamble/fonts}
+\input{preamble/math}
+\input{preamble/layout}
+\input{preamble/environments}
+\input{preamble/bibliography}
+\input{preamble/metadata}     % \thesisTitle, \thesisAuthor, etc.
+\input{preamble/hyperref}     % must come last
+\input{preamble/acronyms}     % acronym definitions (after \makeglossaries)
+% ─────────────────────────────────────────────────────────────
+
+\begin{document}
+
+% ── Cover pages (before \frontmatter, no page numbers) ──────
+% Page anchors are switched off across this block. It runs on the default
+% arabic numbering and each titlingpage resets the counter, so hyperref
+% would emit page.1/page.2 anchors here; being first, they win, and
+% \mainmatter's real page.1/page.2 get dropped as duplicates. Bibliography
+% back-references to body pages 1 and 2 then land on a blank cover page.
+% Nothing links to these pages, so dropping their anchors costs nothing.
+\hypersetup{pageanchor=false}
+\subfile{frontmatter/half_title}
+\subfile{frontmatter/dedication}
+
+\subfile{frontmatter/title_page}
+\clearpage
+
+% ── Front matter ─────────────────────────────────────────────
+\frontmatter
+% \frontmatter has flushed the cover pages, so anchors can come back on;
+% the roman folios from here are unique against \mainmatter's arabic ones.
+\hypersetup{pageanchor=true}
+
+\subfile{frontmatter/abstract}
+
+\subfile{frontmatter/acknowledgments}
+
+\clearpage
+\tableofcontents
+\openany
+\subfile{frontmatter/abbreviations}
+\openright
+
+\subfile{frontmatter/preface}
+
+% ── Main matter ──────────────────────────────────────────────
+\mainmatter
+\subfile{ch1/ch1}
+\subfile{ch2/ch2}
+\subfile{ch3/ch3}
+
+% ── Appendices ───────────────────────────────────────────────
+\appendix
+\createmark{chapter}{left}{shownumber}{\appendixname\ }{.\space}
+% Divider line in the ToC: an unnumbered part-level heading, with no page
+% number, above the appendix entries (which memoir otherwise sets exactly
+% like chapters). Written with \addtocontents rather than \addcontentsline
+% so hyperref adds no part-level PDF bookmark, which would nest the
+% Bibliography and the back matter under it.
+\cleardoublepage
+\hypertarget{appendices}{}
+\addtocontents{toc}{\protect\contentsline{part}{\appendixtocname}{}{appendices}}
+\subfile{appendix/appendix_A}
+\subfile{appendix/appendix_B}
+
+% ── Back matter ──────────────────────────────────────────────
+\backmatter
+
+% Bibliography policy:
+% - publications.bib: printed in full (P1, P2, ...) at the beginning.
+% - publications_not.bib: printed in full (N1, N2, ...) right after, so any
+%   in-text \cite of one of these (e.g. from a chapter mentioning related
+%   work) resolves properly; also listed in the preface outline.
+% - bibliography.bib: printed at the end, cited entries only, citation order.
+% - code packages (selected by citekey in preamble/bibliography.tex): C1, C2, ...
+
+\chapter*[Bibliography]{Bibliography}
+\addcontentsline{toc}{chapter}{Bibliography}
+\section*{Publications by the Author}
+\thesisSuperscript{*} Indicates first theory author.\thesisifcofirstseen{pubsin}{\ \thesisSuperscript{\textdagger} Indicates co-first author.}
+\newrefcontext[labelprefix=P,sorting=oldestfirst]
+\printbibliography[check=pubsin, heading=none, resetnumbers=true]
+\section*{Other Publications by the Author}
+\thesisifcofirstseen{pubsnotin}{\thesisSuperscript{\textdagger} Indicates co-first author.}
+\newrefcontext[labelprefix=N,sorting=oldestfirst]
+\printbibliography[check=pubsnotin, heading=none, resetnumbers=true]
+\section*{References}
+\newrefcontext[labelprefix=]
+\printbibliography[check=mainbib, heading=none, resetnumbers=true]
+\section*{Code Packages}
+\newrefcontext[labelprefix=C]
+\printbibliography[check=codepkg, heading=none, resetnumbers=true]
+
+\begin{disclaimer}
+    This thesis was typeset using a modification of the \href{https://github.com/maiani/fantastic_template}{\textit{Fantastic PhD Thesis Template}} by Andrea Maiani, licensed under the Creative Commons Attribution-NonCommercial 4.0 International License (CC-BY-NC 4.0).
+    Its chapter openings and running heads follow the TU Delft dissertation template.
+\end{disclaimer}
+
+\subfile{backmatter/integrity_statement}
+\subfile{backmatter/colophon}
+
+\end{document}

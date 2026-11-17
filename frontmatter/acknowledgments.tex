@@ -1,0 +1,14 @@
+\documentclass[../main]{subfiles}
+
+\begin{document}
+% Bilingual section: the Spanish title sits under the English one, inside the
+% chapter heading (above the madsen rule), and both share the TOC entry.
+\chapter*{Acknowledgments\\\foreignlanguage{spanish}{Agradecimientos}}
+\addcontentsline{toc}{chapter}{Acknowledgments -- \foreignlanguage{spanish}{Agradecimientos}}
+\lipsum[1-4]
+
+\begin{otherlanguage}{spanish}
+Los párrafos en otro idioma van dentro de \verb|otherlanguage|, para que la separación silábica sea la correcta.
+\lipsum[5]
+\end{otherlanguage}
+\end{document}

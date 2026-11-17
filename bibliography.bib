@@ -1,0 +1,122 @@
+% General literature (printed as 1, 2, ..., cited entries only, citation order).
+% In a real thesis this file is best exported automatically by a reference
+% manager (e.g. Zotero + Better BibTeX auto-export) and never hand-edited.
+% Mock-up entries: all authors, titles and DOIs are fictitious (10.5555 is
+% Crossref's test prefix). One entry of each type the drivers handle.
+% Citekey pattern: Author:JournalAbbrevYY (Smith:PRL20, Lee:a23 for arXiv).
+
+% ── Journal articles (short journal name mapped in preamble/bibliography.tex)
+@article{Smith:PRL20,
+  title = {A Mock Letter That Later Received an Erratum},
+  author = {Smith, Alice and Brown, Bob},
+  year = 2020,
+  month = jan,
+  journal = {Physical Review Letters},
+  volume = {124},
+  number = {3},
+  pages = {036801},
+  doi = {10.5555/mock.prl.2020}
+}
+
+% Erratum, folded into the same numbered item as Smith:PRL20 by the
+% "related" sourcemap in preamble/bibliography.tex. Never cite it directly.
+@article{Smith:ErrPRL21,
+  title = {Erratum: {{A Mock Letter That Later Received an Erratum}}},
+  year = 2021,
+  journal = {Physical Review Letters},
+  volume = {126},
+  number = {9},
+  pages = {099901},
+  doi = {10.5555/mock.prl.2021}
+}
+
+@article{Brown:PRB19,
+  title = {A Mock Article on a Model Hamiltonian},
+  author = {Brown, Bob and Garc{\'i}a, Carmen and Lee, Min},
+  year = 2019,
+  journal = {Physical Review B},
+  volume = {99},
+  number = {12},
+  pages = {125407},
+  doi = {10.5555/mock.prb.2019}
+}
+
+% Journal without a short-name mapping: printed with its full name.
+@article{Garcia:NP22,
+  title = {A Mock Experiment in a Journal without a Short-Name Mapping},
+  author = {Garc{\'i}a, Carmen and M{\"u}ller, Hans and Kowalski, Piotr and Roe, Richard and Smith, Alice and Brown, Bob and Lee, Min},
+  year = 2022,
+  journal = {Nature Physics},
+  volume = {18},
+  pages = {1001--1006},
+  doi = {10.5555/mock.np.2022}
+}
+
+% ── Preprint
+@misc{Lee:a23,
+  title = {A Mock Preprint by Other Authors},
+  author = {Lee, Min and Kowalski, Piotr},
+  year = 2023,
+  number = {arXiv:2301.00000},
+  eprint = {2301.00000},
+  primaryclass = {cond-mat.supr-con},
+  publisher = {arXiv},
+  doi = {10.5555/mock.arxiv.2023},
+  archiveprefix = {arXiv}
+}
+
+% ── Book (ISBN linked to the DOI or URL)
+@book{Muller:96,
+  title = {Introduction to Mock Physics},
+  author = {M{\"u}ller, Hans},
+  year = 1996,
+  edition = {2nd ed.},
+  publisher = {Example Press},
+  location = {Springfield},
+  isbn = {978-0-000-00000-2},
+  url = {https://example.org/mock-book}
+}
+
+% ── Book chapter
+@incollection{Roe:18,
+  title = {A Mock Chapter in an Edited Volume},
+  booktitle = {Advances in Mock Physics},
+  author = {Roe, Richard},
+  editor = {Smith, Alice},
+  year = 2018,
+  number = {3},
+  pages = {45--78},
+  publisher = {Example Press},
+  location = {Springfield},
+  isbn = {978-0-000-00001-9},
+  doi = {10.5555/mock.chapter.2018}
+}
+
+% ── Conference proceedings
+@inproceedings{Kowalski:17,
+  title = {A Mock Contribution to a Conference},
+  booktitle = {Proceedings of the International Conference on Mock Physics},
+  author = {Kowalski, Piotr and Lee, Min},
+  year = 2017,
+  pages = {12--15},
+  publisher = {Example Press},
+  location = {Springfield}
+}
+
+% ── Code packages: moved to the "Code Packages" list (C1, C2, ...) by the
+%    sourcemap in preamble/bibliography.tex, which also sets their repository.
+@misc{Doe:26a,
+  title = {{{MockPackage.jl}}},
+  author = {Doe, Jane},
+  year = 2026,
+  publisher = {Zenodo},
+  doi = {10.5555/mock.zenodo.1}
+}
+
+@misc{Smith:26,
+  title = {{{OtherPackage}}},
+  author = {Smith, Alice},
+  year = 2026,
+  publisher = {Zenodo},
+  doi = {10.5555/mock.zenodo.2}
+}

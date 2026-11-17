@@ -1,0 +1,33 @@
+% ============================================================
+% Hyperlinks — must be loaded last (after fonts, colors, etc.)
+% ============================================================
+\usepackage{hyperref}
+\hypersetup{
+    pdftitle={\thesisTitle},
+    pdfauthor={\thesisAuthor},
+    pdfkeywords={\thesisKeywords},
+    unicode,
+    naturalnames,
+    bookmarksdepth=paragraph,
+    linktocpage=true,
+    colorlinks=true,
+    % Cross-refs (linkcolor) are the busiest link type in the running text —
+    % Fig./Eq./Section, plus every ToC entry — so they get the calmer of the
+    % two institutional hues. Citations are compact bracketed numerals, so
+    % the more assertive red reads fine there. URLs stay rare and blue, and
+    % are allowed to stand out since leaving the document is the point.
+    linkcolor=my_green_d,
+    citecolor=my_red_d,
+    urlcolor=my_blue_d,
+    filecolor=black,
+}
+
+% Keep hyperlink destination names ASCII-stable and independent of the
+% printed numbering, so anchors stay valid if a language switch alters
+% encodings or the section scheme changes.
+\makeatletter
+\renewcommand*{\theHchapter}{\arabic{chapter}}
+\renewcommand*{\theHsection}{\theHchapter.\arabic{section}}
+\renewcommand*{\theHsubsection}{\theHsection.\arabic{subsection}}
+\renewcommand*{\theHsubsubsection}{\theHsubsection.\arabic{subsubsection}}
+\makeatother

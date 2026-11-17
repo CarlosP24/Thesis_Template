@@ -1,0 +1,23 @@
+% ============================================================
+% Math packages and operators
+% ============================================================
+\usepackage{mathtools, bm}
+\usepackage{xspace}
+\usepackage{upgreek}         % upright Greek (\uptau, ...), for \transm below
+
+% Extra operators
+\DeclareMathOperator{\argmax}{argmax}
+
+% Wave symmetries
+\newcommand{\swave}{\mbox{$s$-wave}\xspace}
+\newcommand{\pwave}{\mbox{$p$-wave}\xspace}
+\newcommand{\dwave}{\mbox{$d$-wave}\xspace}
+
+% Transmission probability of a junction: an upright tau, so that it is not
+% confused with the italic Pauli matrices $\tau_i$ of particle-hole space.
+\newcommand{\transm}{\uptau}
+
+\AtBeginDocument{%
+  \renewcommand{\Re}{\text{Re}}
+  \renewcommand{\Im}{\text{Im}}
+}

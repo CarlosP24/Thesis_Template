@@ -1,0 +1,69 @@
+% ============================================================
+% Core packages
+% ============================================================
+\usepackage{subfiles}        % Modular compilation
+\usepackage{pdfpages}        % Include external PDFs
+\usepackage{lipsum}          % Dummy text (remove for final version)
+\usepackage{microtype}
+\usepackage{etoolbox}
+
+% Language and hyphenation
+\usepackage[main=english, spanish, danish, greek, french]{babel}
+\frenchsetup{AutoSpacePunctuation=false} % no automatic space before : ; ! ?
+\usepackage{csquotes}
+
+% Figures and Tables
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage[export]{adjustbox}
+\usepackage{graphicx}
+\usepackage[figurename=Fig.]{caption}
+\captionsetup{font=small}
+
+% Other scientific packages
+\usepackage{chemmacros}
+\chemsetup{greek=upgreek}
+\usepackage{siunitx}
+\usepackage{nicematrix}
+\usepackage{physics}
+
+% TikZ
+\usepackage{tikz}
+
+% Misc
+\usepackage{ragged2e}
+\usepackage{indentfirst}
+\usepackage{footnotehyper}
+\usepackage{multicol}
+
+\usepackage[acronym, toc, nomain]{glossaries}
+\makeglossaries
+% Disable glossaries' own per-entry hyperlinks (which mis-anchor in memoir's
+% boxed item labels).  Instead, \glstextformat wraps every in-text acronym in
+% a plain \hyperref link that goes to the \label{abbreviations} on the list
+% page — reliable, no colour, still clickable.
+\glsdisablehyper
+\makeatletter
+\newcommand{\thesisacronymlink}[1]{%
+	\@ifundefined{r@abbreviations}{#1}{\hyperref[abbreviations]{\textcolor{black}{#1}}}%
+}
+\makeatother
+\renewcommand{\glstextformat}[1]{\thesisacronymlink{#1}}
+
+% Two-column, tight-spacing glossary style for the List of Abbreviations:
+% clones the stock "list" style but wraps the entries (not the chapter
+% heading printed by \printglossary) in a multicols{2} block, and collapses
+% the description-list spacing since most entries are shorter than a line.
+\newglossarystyle{acrtwocol}{%
+	\setglossarystyle{list}%
+	\renewenvironment{theglossary}%
+		{\glslistinit
+		 \begin{multicols}{2}%
+		 \setlength{\parskip}{0pt}%
+		 \setlength{\itemsep}{0pt}%
+		 \setlength{\parsep}{0pt}%
+		 \setlength{\topsep}{0pt}%
+		 \setlength{\partopsep}{0pt}%
+		 \begin{description}}%
+		{\end{description}\end{multicols}}%
+}

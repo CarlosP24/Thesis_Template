@@ -1,0 +1,116 @@
+\documentclass[../main]{subfiles}
+
+% Chapter 3: conclusions and outlook, followed by their translation into
+% Spanish (a requirement of the UAM doctoral school). The conclusions are
+% organized by question (TU Delft style): a chapter lead-in, a Conclusions
+% section of titled \paragraphs closed by an overview after \sectionclose,
+% and an Outlook section of untitled paragraphs.
+
+\begin{document}
+\ifSubfilesClassLoaded{\setcounter{chapter}{2}}{}
+
+\chapter{Conclusions and Outlook}
+\label{ch:ch3}
+\begin{otherlanguage}{french}
+\begin{chquote}
+Ceci est une citation d'exemple. \\
+\bigskip
+-- Auteur, \textit{Œuvre}
+\end{chquote}
+\end{otherlanguage}
+
+% A chapter without chabstract fills the opening page with \vfill.
+\vfill
+
+\clearpage
+
+The lead-in recalls the question that runs through the thesis.
+\lipsum[1][1-6]
+
+\section{Conclusions}
+\label{sec:conclusions}
+
+\paragraph{The first question}
+\lipsum[2][1-6]
+
+\paragraph{The second question}
+\lipsum[3][1-6]
+
+\paragraph{The third question}
+\lipsum[4][1-6]
+
+\paragraph{The fourth question}
+\lipsum[5][1-6]
+
+\sectionclose
+This overview gathers the answers to the four questions.
+\lipsum[6][1-3]
+
+\section{Outlook}
+\label{sec:outlook}
+\lipsum[7][1-5]
+
+\lipsum[8][1-5]
+
+\sectionclose
+\lipsum[9][1-3]
+
+
+% ── Spanish translation ─────────────────────────────────────
+\begin{otherlanguage}{spanish}
+\chapter*{Conclusiones y perspectivas}
+\addcontentsline{toc}{chapter}{\protect\numberline{}Conclusiones y perspectivas}
+\label{ch:ch3_es}
+% \chapter* does not set the running mark, so without this the head would
+% still read "3. Conclusions and Outlook" from the chapter above.
+\markboth{Conclusiones y perspectivas}{}
+
+\vfill
+\begin{disclaimer}
+    Este capítulo es una traducción al español del Capítulo~\ref{ch:ch3}.\\
+    \indent\foreignlanguage{english}{This chapter is a Spanish translation of Chapter~\ref{ch:ch3}.}
+\end{disclaimer}
+
+\clearpage
+
+% Acronyms keep their English short forms after a Spanish long form written
+% by hand, since \acrfull/\acrlong would print the English one. Acronym
+% plurals are invariable in Spanish ("los ABS"), so \acrshort throughout.
+% \section* keeps the sections out of the numbering; \markright sets the
+% running head.
+La introducción recuerda la pregunta que vertebra la tesis, con los estados ligados de Andreev (\acrshort{abs}, por sus siglas en inglés) como ejemplo de acrónimo.
+\lipsum[1][1-6]
+
+\section*{Conclusiones}
+\markright{Conclusiones}
+
+\paragraph{La primera pregunta}
+\lipsum[2][1-6]
+
+\paragraph{La segunda pregunta}
+\lipsum[3][1-6]
+
+\paragraph{La tercera pregunta}
+\lipsum[4][1-6]
+
+\paragraph{La cuarta pregunta}
+\lipsum[5][1-6]
+
+\sectionclose
+\lipsum[6][1-3]
+
+\section*{Perspectivas}
+\markright{Perspectivas}
+\lipsum[7][1-5]
+
+\lipsum[8][1-5]
+
+\sectionclose
+\lipsum[9][1-3]
+\end{otherlanguage}
+
+\ifSubfilesClassLoaded{%
+\newrefcontext[labelprefix=]
+\printbibliography
+}{}
+\end{document}

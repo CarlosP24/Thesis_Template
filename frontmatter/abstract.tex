@@ -1,0 +1,27 @@
+\documentclass[../main]{subfiles}
+
+\begin{document}
+% English abstract, followed by its translation (here, Spanish, as required
+% by the UAM doctoral school). Acronyms follow the same rules as in the
+% chapters: \acrlong for a single use, \acrfull at the first of several.
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+This is the abstract of the thesis, organized in a few paragraphs of one sentence per source line.
+It uses an acronym only once, so it spells it out with \verb|\acrlong|: \acrlong{dos}.
+\lipsum[1]
+
+\lipsum[2-3]
+
+\begin{otherlanguage}{spanish}
+\chapter*{Resumen}
+\addcontentsline{toc}{chapter}{Resumen}
+% In the translation, write the Spanish long form by hand and keep the
+% English short form: "la densidad de estados (\acrshort{dos}, por sus
+% siglas en inglés)". \acrfull/\acrlong would print the English long form.
+Este es el resumen de la tesis, traducido al español, con la densidad de estados (\acrshort{dos}, por sus siglas en inglés) como ejemplo de acrónimo.
+\lipsum[1]
+
+\lipsum[2-3]
+\end{otherlanguage}
+
+\end{document}

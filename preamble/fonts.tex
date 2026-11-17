@@ -1,0 +1,41 @@
+% ============================================================
+% Font selection
+% ============================================================
+
+%\usepackage{lmodern}                  % Latin Modern (revised default)
+\usepackage{fourier-otf}
+\babelfont[greek]{rm}{GFS Artemisia}   % Polytonic Greek text font
+\usepackage[condensed]{roboto}         % Headings, running heads
+\renewcommand{\seriesdefault}{m}      % Restore serif text defaults after roboto
+\newfontfamily\robotoMediumFace{Roboto}[
+	UprightFont = *-Medium,
+	ItalicFont = *-MediumItalic,
+	BoldFont = *-Bold,
+	BoldItalicFont = *-BoldItalic,
+	Mapping = tex-text
+]
+
+% ── Cover-page faces ────────────────────────────────────────
+% The half title, title page and imprint page are set in the text face
+% (Utopia/Erewhon, via fourier-otf), not in Roboto: Roboto stays reserved
+% for chapter, section and running headings, so the opening pages read as
+% part of the book rather than as an administrative form.  Sizes follow
+% the UAM template's hierarchy (title largest, author next, the rest at
+% information size) without matching its 28 pt sans setting literally.
+\newcommand{\coverTitleFace}{\rmfamily\bfseries\fontsize{27pt}{32pt}\selectfont}
+\newcommand{\coverAuthorFace}{\rmfamily\scshape\fontsize{21pt}{25pt}\selectfont}
+\newcommand{\coverKindFace}{\rmfamily\itshape\fontsize{15pt}{19pt}\selectfont}
+\newcommand{\coverInfoFace}{\rmfamily\fontsize{11pt}{15pt}\selectfont}
+\newcommand{\coverDateFace}{\rmfamily\fontsize{13pt}{16pt}\selectfont}
+\newcommand{\coverImprintFace}{\rmfamily\itshape\fontsize{13pt}{16pt}\selectfont}
+\newcommand{\coverHalfTitleFace}{%
+	\rmfamily\scshape\fontsize{14pt}{18pt}\selectfont
+	\addfontfeature{LetterSpace=4.5}}
+
+% Full-measure hairline used above and below the title, matching the rule
+% of the madsen chapter openers.
+\newcommand{\coverRule}{\rule{\textwidth}{0.6pt}}
+
+% Scratch length the imprint page uses to give the logo strips a common
+% height; allocated here so the page body only has to \settoheight it.
+\newlength{\coverLogoHeight}
